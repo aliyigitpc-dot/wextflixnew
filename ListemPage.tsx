@@ -1,13 +1,30 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
-import './index.css'
-import App from './App'
+import { Link } from 'react-router-dom'
+import { Header } from '@/components/Header'
+import { Footer } from '@/components/Footer'
+import { SeriesCard } from '@/components/SeriesCard'
+import { getSeries } from '@/data/series'
+import { useMyList } from '@/hooks/useLocalList'
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </StrictMode>,
-)
+export default function ListemPage() {
+  const { items } = useMyList()
+  const ss = items.map(getSeries).filter((x): x is NonNullable<typeof x> => Boolean(x))
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--background)' }}>
+      <Header />
+      <main style={{ paddingTop: '7rem', padding: '7rem 2rem 4rem', maxWidth: '1600px', margin: '0 auto', minHeight: '60vh' }}>
+        <h1 style={{ fontFamily: "'Bebas Neue', Impact, sans-serif", fontSize: 'clamp(3rem, 8vw, 5rem)', marginBottom: '2rem', color: 'var(--foreground)' }}>Listem</h1>
+        {ss.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '5rem 0', color: 'var(--muted-foreground)' }}>
+            <p style={{ marginBottom: '1rem' }}>Listende henüz dizi yok.</p>
+            <Link to="/" style={{ color: 'var(--primary)' }}>Keşfetmeye başla</Link>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', paddingTop: '1.5rem' }}>
+            {ss.map((s) => <SeriesCard key={s.id} s={s} />)}
+          </div>
+        )}
+      </main>
+      <Footer />
+    </div>
+  )
+}
