@@ -1,113 +1,95 @@
-import { Link } from 'react-router-dom'
-import { WexflixLogo } from './WexflixLogo'
+import { useRef, type ReactNode } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-const cols = [
-  {
-    title: 'Keşfet',
-    links: [
-      { to: '/', label: 'Anasayfa' },
-      { to: '/favoriler', label: 'Favoriler' },
-      { to: '/listem', label: 'Listem' },
-    ],
-  },
-  {
-    title: 'Wexflix',
-    links: [
-      { to: '/hakkimizda', label: 'Hakkımızda' },
-      { to: '/iletisim', label: 'İletişim' },
-    ],
-  },
-  {
-    title: 'Yasal',
-    links: [
-      { to: '/gizlilik', label: 'Gizlilik' },
-      { to: '/gizlilik', label: 'Çerezler' },
-    ],
-  },
-]
+export function Row({ title, children }: { title: string; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
 
-export function Footer() {
+  const scroll = (dir: 1 | -1) => {
+    const el = ref.current
+    if (!el) return
+    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' })
+  }
+
   return (
-    <footer
-      style={{
-        marginTop: '5rem',
-        borderTop: '1px solid rgba(46,43,40,0.4)',
-        background: 'var(--background)',
-      }}
-    >
-      <div
+    <section className="group/row" style={{ position: 'relative', padding: '1.5rem 0' }}>
+      <h2
         style={{
-          maxWidth: '1600px',
-          margin: '0 auto',
-          padding: '3rem 2rem',
-          fontSize: '0.875rem',
-          color: 'var(--muted-foreground)',
+          fontFamily: "'Bebas Neue', Impact, sans-serif",
+          fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+          padding: '0 2rem',
+          marginBottom: '0.75rem',
+          letterSpacing: '0.05em',
+          color: 'var(--foreground)',
         }}
       >
-        <WexflixLogo size="sm" />
-        <p style={{ marginTop: '1rem', maxWidth: '36rem' }}>
-          Wexflix, <strong style={{ color: 'var(--foreground)' }}>WDB</strong> tarafından üretilen bir dizi-karikatür platformudur.{' '}
-          <strong style={{ color: 'var(--foreground)' }}>Elyas</strong> tarafından desteklenir. Sikkolik evreni çok yakında.
-        </p>
-
-        <div
+        {title}
+      </h2>
+      <div style={{ position: 'relative' }}>
+        <button
+          onClick={() => scroll(-1)}
           style={{
-            marginTop: '2.5rem',
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            bottom: 0,
+            zIndex: 20,
+            width: '3rem',
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '2rem',
-            fontSize: '0.75rem',
+            placeItems: 'center',
+            background: 'rgba(20,18,16,0.6)',
+            border: 'none',
+            cursor: 'pointer',
+            color: 'var(--foreground)',
+            opacity: 0,
+            transition: 'opacity 0.2s',
           }}
+          className="scroll-btn-left"
+          aria-label="Sola kaydır"
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+          onMouseLeave={(e) => (e.currentTarget.style.opacity = '0')}
         >
-          {cols.map((c) => (
-            <div key={c.title}>
-              <div
-                style={{
-                  color: 'var(--foreground)',
-                  fontWeight: 600,
-                  marginBottom: '0.75rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
-                }}
-              >
-                {c.title}
-              </div>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                {c.links.map((l) => (
-                  <li key={l.label} style={{ marginBottom: '0.5rem' }}>
-                    <Link
-                      to={l.to}
-                      style={{
-                        color: 'var(--muted-foreground)',
-                        textDecoration: 'none',
-                        transition: 'color 0.2s',
-                      }}
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+          <ChevronLeft size={32} />
+        </button>
 
         <div
+          ref={ref}
+          className="scrollbar-hide"
           style={{
-            marginTop: '2.5rem',
-            paddingTop: '1.5rem',
-            borderTop: '1px solid rgba(46,43,40,0.4)',
             display: 'flex',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '0.75rem',
-            fontSize: '0.75rem',
+            gap: '1rem',
+            overflowX: 'auto',
+            padding: '1.5rem 2rem',
+            margin: '-1.5rem 0',
           }}
         >
-          <div>© 2026 Wexflix · bir WDB yapımı</div>
-          <div style={{ opacity: 0.7 }}>Powered by Elyas</div>
+          {children}
         </div>
+
+        <button
+          onClick={() => scroll(1)}
+          style={{
+            position: 'absolute',
+            right: 0,
+            top: 0,
+            bottom: 0,
+            zIndex: 20,
+            width: '3rem',
+            display: 'grid',
+            placeItems: 'center',
+            background: 'rgba(20,18,16,0.6)',
+            border: 'none',
+            cursor: 'pointer',
+            color: 'var(--foreground)',
+            opacity: 0,
+            transition: 'opacity 0.2s',
+          }}
+          aria-label="Sağa kaydır"
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+          onMouseLeave={(e) => (e.currentTarget.style.opacity = '0')}
+        >
+          <ChevronRight size={32} />
+        </button>
       </div>
-    </footer>
+    </section>
   )
 }
