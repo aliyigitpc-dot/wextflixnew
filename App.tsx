@@ -1,12 +1,11 @@
 import { Routes, Route } from 'react-router-dom'
-import { Toaster } from 'sonner'
-import HomePage from './pages/HomePage'
-import DiziPage from './pages/DiziPage'
-import ListemPage from './pages/ListemPage'
-import FavorilerPage from './pages/FavorilerPage'
-import HakkimizdaPage from './pages/HakkimizdaPage'
-import GizlilikPage from './pages/GizlilikPage'
-import IletisimPage from './pages/IletisimPage'
+import HomePage from './HomePage'
+import DiziPage from './DiziPage'
+import ListemPage from './ListemPage'
+import FavorilerPage from './FavorilerPage'
+import HakkimizdaPage from './HakkimizdaPage'
+import GizlilikPage from './GizlilikPage'
+import IletisimPage from './IletisimPage'
 
 export default function App() {
   return (
